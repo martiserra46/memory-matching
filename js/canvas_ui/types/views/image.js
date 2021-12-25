@@ -38,7 +38,7 @@ export function newViewTypeImage() {
     },
 
     drawItself(view, bundle, ctx) {
-      this._drawArea(view, ctx);
+      draw.drawArea(view, ctx);
       this._drawImage(view, bundle, ctx);
     },
 
