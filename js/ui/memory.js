@@ -87,11 +87,11 @@ const newImage = function (src) {
     image.setProperty("src", null);
   });
 
-  container.addListener("mouseEnter", function (component, event) {
+  container.addListener("mouseDown", function (component, event) {
     component.setProperty("backgroundColor", "#05080F");
   });
 
-  container.addListener("mouseLeave", function (component, event) {
+  container.addListener("mouseUpAnywhere", function (component, event) {
     component.setProperty("backgroundColor", "#0F192E");
   });
 
