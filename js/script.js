@@ -1,13 +1,4 @@
 import { canvasUI } from "./canvas_ui/canvas_ui.js";
+import { memoryUI } from "./ui/memory.js";
 
-const ui = canvasUI.ui.newUI("#ui");
-
-const root = canvasUI.layouts.newLayout({
-  type: "frame",
-  properties: {
-    backgroundColor: "#14213d",
-    borderRadius: 0,
-  },
-});
-
-ui.init(root);
+canvasUI.ui.newUI("#ui").init(memoryUI.root);
