@@ -84,7 +84,7 @@ const newImage = function (src) {
   container.setFunction("hide", function (component) {
     component.set("showing", false);
     const image = component.get("image");
-    image.setProperty("src", null);
+    image.setProperty("src", "");
   });
 
   container.addListener("mouseDown", function (component, event) {
