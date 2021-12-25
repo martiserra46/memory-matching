@@ -63,7 +63,7 @@ const createLivesText = function () {
       fontColor: "#FFF",
       fontWeight: 900,
       align: {
-        horizontal: "left",
+        horizontal: "middle",
         vertical: "middle",
       },
       margin: 20,
@@ -73,7 +73,7 @@ const createLivesText = function () {
   livesText.set("lives", 0);
   livesText.setFunction("setLives", function (component, lives) {
     livesText.set("lives", lives);
-    livesText.setProperty("text", `Lives ${lives}`);
+    livesText.setProperty("text", `Lives: ${lives}`);
   });
   return livesText;
 };
