@@ -11,7 +11,7 @@ const randomBetweenNumbers = function (min, max) {
 
 const createRoot = function () {
   return canvasUI.layouts.newLayout({
-    type: "frame",
+    type: "relative",
     properties: {
       backgroundColor: "#14213d",
       borderRadius: 0,
@@ -41,9 +41,90 @@ const createGrid = function (numColumns, numRows) {
 
 const insertGridToRoot = function (root, grid) {
   root.addChild(grid, {
-    gravity: {
-      horizontal: "middle",
-      vertical: "middle",
+    attachTo: {
+      top: "parent",
+      bottom: "parent",
+      left: "parent",
+      right: "parent",
+    },
+  });
+};
+
+const createLivesText = function () {
+  const livesText = canvasUI.views.newView({
+    type: "text",
+    properties: {
+      size: {
+        width: ["px", 200],
+        height: ["px", 60],
+      },
+      text: "Lives: 0",
+      fontSize: 20,
+      fontColor: "#FFF",
+      fontWeight: 900,
+      align: {
+        horizontal: "left",
+        vertical: "middle",
+      },
+      margin: 20,
+      backgroundColor: "#0F192E",
+    },
+  });
+  livesText.set("lives", 0);
+  livesText.setFunction("setLives", function (component, lives) {
+    livesText.set("lives", lives);
+    livesText.setProperty("text", `Lives ${lives}`);
+  });
+  return livesText;
+};
+
+const insertLivesTextToRoot = function (root, grid, livesText) {
+  root.addChild(livesText, {
+    attachTo: {
+      top: "parent",
+      bottom: "parent",
+      right: "parent",
+      left: grid,
+    },
+    bias: {
+      vertical: 33,
+    },
+  });
+};
+
+const createRestartButton = function () {
+  const restartButton = canvasUI.views.newView({
+    type: "button",
+    properties: {
+      size: {
+        width: ["px", 200],
+        height: ["px", 60],
+      },
+      text: "Restart",
+      fontSize: 20,
+      fontColor: "#FFF",
+      fontWeight: 900,
+      backgroundColor: "#05080F",
+      backgroundColorOnClick: "#0F182E",
+    },
+  });
+  return restartButton;
+};
+
+const insertRestartButtonToRoot = function (
+  root,
+  grid,
+  livesText,
+  restartButton
+) {
+  root.addChild(restartButton, {
+    attachTo: {
+      top: livesText,
+      right: "parent",
+      left: grid,
+    },
+    margin: {
+      top: 30,
     },
   });
 };
@@ -150,10 +231,16 @@ const imageSources = [
 const root = createRoot();
 const grid = createGrid(numColumns, numRows);
 insertGridToRoot(root, grid);
+const livesText = createLivesText();
+insertLivesTextToRoot(root, grid, livesText);
+const restartButton = createRestartButton();
+insertRestartButtonToRoot(root, grid, livesText, restartButton);
 const images = createImages(numColumns, numRows, imageSources);
 insertImagesToGrid(grid, numColumns, numRows, images);
 
 export const memoryUI = {
   root,
   images,
+  livesText,
+  restartButton,
 };
