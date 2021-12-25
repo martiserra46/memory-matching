@@ -92,7 +92,7 @@ const newImage = function (src) {
   });
 
   container.addListener("mouseLeave", function (component, event) {
-    component.setProperty("backgroundColor", "#0A111F");
+    component.setProperty("backgroundColor", "#0F192E");
   });
 
   return container;
