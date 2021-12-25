@@ -47,6 +47,7 @@ memoryUI.images.forEach((image) => {
       selectedImages[0] = image;
       return;
     }
+    if (selectedImages[0] === image) return;
     selectedImages[1] = image;
     if (selectedImages[0].get("src") === selectedImages[1].get("src")) {
       remainingImages.splice(remainingImages.indexOf(selectedImages[0]), 1);
