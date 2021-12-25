@@ -1,5 +1,20 @@
 import { canvasUI } from "./../canvas_ui/canvas_ui.js";
 
+const numColumns = 5;
+const numRows = 4;
+const imageSources = [
+  "img/bear.svg",
+  "img/bird.svg",
+  "img/bull.svg",
+  "img/cat.svg",
+  "img/chicken.svg",
+  "img/cow.svg",
+  "img/dog.svg",
+  "img/duck.svg",
+  "img/elephant.svg",
+  "img/gorilla.svg",
+];
+
 const randomArrayElement = function (array) {
   const index = Math.floor(Math.random() * array.length);
   return array[index];
@@ -7,6 +22,65 @@ const randomArrayElement = function (array) {
 
 const randomBetweenNumbers = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+const newImage = function (src) {
+  const container = canvasUI.layouts.newLayout({
+    type: "frame",
+    properties: {
+      backgroundColor: "#0F192E",
+      borderRadius: 10,
+    },
+  });
+
+  const image = canvasUI.views.newView({
+    type: "image",
+    properties: {
+      size: { width: ["%", 100], height: ["%", 100] },
+      src: "",
+    },
+  });
+
+  container.addChild(image, {
+    margin: { top: 30, right: 30, bottom: 30, left: 30 },
+  });
+
+  container.set("image", image);
+
+  container.set("src", src);
+
+  container.setFunction("show", function (component) {
+    const image = component.get("image");
+    image.setProperty("src", component.get("src"));
+  });
+
+  container.setFunction("hide", function (component) {
+    const image = component.get("image");
+    image.setProperty("src", "");
+  });
+
+  container.addListener("mouseDown", function (component, event) {
+    component.setProperty("backgroundColor", "#05080F");
+  });
+
+  container.addListener("mouseUpAnywhere", function (component, event) {
+    component.setProperty("backgroundColor", "#0F192E");
+  });
+
+  return container;
+};
+
+const randomAvailablePosition = function (numColumns, numRows, usedPositions) {
+  let valid = false;
+  let column, row;
+  while (!valid) {
+    column = randomBetweenNumbers(0, numColumns - 1);
+    row = randomBetweenNumbers(0, numRows - 1);
+    valid = usedPositions.every(
+      (position) => position[0] !== column || position[1] !== row
+    );
+  }
+  return [column, row];
 };
 
 const createRoot = function () {
@@ -19,7 +93,9 @@ const createRoot = function () {
   });
 };
 
-const createGrid = function (numColumns, numRows) {
+const root = createRoot();
+
+const createGrid = function () {
   return canvasUI.layouts.newLayout({
     type: "grid",
     properties: {
@@ -28,8 +104,8 @@ const createGrid = function (numColumns, numRows) {
         height: "auto",
       },
       dimensions: {
-        columns: [["px", 200, numColumns]],
-        rows: [["px", 200, numRows]],
+        columns: [["px", 160, numColumns]],
+        rows: [["px", 160, numRows]],
       },
       gap: {
         horizontal: 20,
@@ -39,7 +115,9 @@ const createGrid = function (numColumns, numRows) {
   });
 };
 
-const insertGridToRoot = function (root, grid) {
+const grid = createGrid();
+
+const insertGridToRoot = function () {
   root.addChild(grid, {
     attachTo: {
       top: "parent",
@@ -49,6 +127,8 @@ const insertGridToRoot = function (root, grid) {
     },
   });
 };
+
+insertGridToRoot();
 
 const createLivesText = function () {
   const livesText = canvasUI.views.newView({
@@ -78,7 +158,9 @@ const createLivesText = function () {
   return livesText;
 };
 
-const insertLivesTextToRoot = function (root, grid, livesText) {
+const livesText = createLivesText();
+
+const insertLivesTextToRoot = function () {
   root.addChild(livesText, {
     attachTo: {
       top: "parent",
@@ -91,6 +173,8 @@ const insertLivesTextToRoot = function (root, grid, livesText) {
     },
   });
 };
+
+insertLivesTextToRoot();
 
 const createRestartButton = function () {
   const restartButton = canvasUI.views.newView({
@@ -111,12 +195,9 @@ const createRestartButton = function () {
   return restartButton;
 };
 
-const insertRestartButtonToRoot = function (
-  root,
-  grid,
-  livesText,
-  restartButton
-) {
+const restartButton = createRestartButton();
+
+const insertRestartButtonToRoot = function () {
   root.addChild(restartButton, {
     attachTo: {
       top: livesText,
@@ -129,57 +210,9 @@ const insertRestartButtonToRoot = function (
   });
 };
 
-const newImage = function (src) {
-  const container = canvasUI.layouts.newLayout({
-    type: "frame",
-    properties: {
-      backgroundColor: "#0F192E",
-      borderRadius: 10,
-    },
-  });
+insertRestartButtonToRoot();
 
-  const image = canvasUI.views.newView({
-    type: "image",
-    properties: {
-      size: { width: ["%", 100], height: ["%", 100] },
-      src: "",
-    },
-  });
-
-  container.addChild(image, {
-    margin: { top: 30, right: 30, bottom: 30, left: 30 },
-  });
-
-  container.set("image", image);
-
-  container.set("src", src);
-
-  container.set("showing", false);
-
-  container.setFunction("show", function (component) {
-    component.set("showing", true);
-    const image = component.get("image");
-    image.setProperty("src", component.get("src"));
-  });
-
-  container.setFunction("hide", function (component) {
-    component.set("showing", false);
-    const image = component.get("image");
-    image.setProperty("src", "");
-  });
-
-  container.addListener("mouseDown", function (component, event) {
-    component.setProperty("backgroundColor", "#05080F");
-  });
-
-  container.addListener("mouseUpAnywhere", function (component, event) {
-    component.setProperty("backgroundColor", "#0F192E");
-  });
-
-  return container;
-};
-
-const createImages = function (numColumns, numRows, imageSources) {
+const createImages = function () {
   const images = [];
   const availableSrcs = [...imageSources];
   const numDifferentSrcs = (numColumns * numRows) / 2;
@@ -191,20 +224,9 @@ const createImages = function (numColumns, numRows, imageSources) {
   return images;
 };
 
-const randomAvailablePosition = function (numColumns, numRows, usedPositions) {
-  let valid = false;
-  let column, row;
-  while (!valid) {
-    column = randomBetweenNumbers(0, numColumns - 1);
-    row = randomBetweenNumbers(0, numRows - 1);
-    valid = usedPositions.every(
-      (position) => position[0] !== column || position[1] !== row
-    );
-  }
-  return [column, row];
-};
+const images = createImages();
 
-const insertImagesToGrid = function (grid, numColumns, numRows, images) {
+const insertImagesToGrid = function () {
   const usedPositions = [];
   for (const image of images) {
     const position = randomAvailablePosition(
@@ -217,30 +239,7 @@ const insertImagesToGrid = function (grid, numColumns, numRows, images) {
   }
 };
 
-const numColumns = 5;
-const numRows = 4;
-const imageSources = [
-  "img/bear.svg",
-  "img/bird.svg",
-  "img/bull.svg",
-  "img/cat.svg",
-  "img/chicken.svg",
-  "img/cow.svg",
-  "img/dog.svg",
-  "img/duck.svg",
-  "img/elephant.svg",
-  "img/gorilla.svg",
-];
-
-const root = createRoot();
-const grid = createGrid(numColumns, numRows);
-insertGridToRoot(root, grid);
-const livesText = createLivesText();
-insertLivesTextToRoot(root, grid, livesText);
-const restartButton = createRestartButton();
-insertRestartButtonToRoot(root, grid, livesText, restartButton);
-const images = createImages(numColumns, numRows, imageSources);
-insertImagesToGrid(grid, numColumns, numRows, images);
+insertImagesToGrid();
 
 export const memoryUI = {
   root,
