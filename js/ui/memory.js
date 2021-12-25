@@ -32,8 +32,8 @@ const createGrid = function (numColumns, numRows) {
         rows: [["px", 200, numRows]],
       },
       gap: {
-        horizontal: 50,
-        vertical: 50,
+        horizontal: 20,
+        vertical: 20,
       },
     },
   });
@@ -217,8 +217,8 @@ const insertImagesToGrid = function (grid, numColumns, numRows, images) {
   }
 };
 
-const numColumns = 4;
-const numRows = 3;
+const numColumns = 5;
+const numRows = 4;
 const imageSources = [
   "img/bear.svg",
   "img/bird.svg",
@@ -226,6 +226,10 @@ const imageSources = [
   "img/cat.svg",
   "img/chicken.svg",
   "img/cow.svg",
+  "img/dog.svg",
+  "img/duck.svg",
+  "img/elephant.svg",
+  "img/gorilla.svg",
 ];
 
 const root = createRoot();

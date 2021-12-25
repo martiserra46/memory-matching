@@ -143,11 +143,11 @@ const setOnClickImages = function (
 const images = memoryUI.images;
 const livesText = memoryUI.livesText;
 const restartButton = memoryUI.restartButton;
-const secondsInit = 3;
+const secondsInit = 5;
 const remainingImages = [...images];
 const selectedImages = [null, null];
-const secondsShow = 2;
-const lives = { lives: 2 };
+const secondsShow = 1.5;
+const lives = { lives: 10 };
 
 showImagesSeconds(images, secondsInit);
 setLives(livesText, lives);
